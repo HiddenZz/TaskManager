@@ -14,6 +14,11 @@ stop-docker: ## Stop docker
 	$(call print-target)
 	@docker-compose stop
 
+.PHONY: fix
+fix: ## Format code
+	$(call print-target)
+	@go fmt ./...
+
 
 define print-target
     @printf "Executing target: \033[36m$@\033[0m\n"
