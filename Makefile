@@ -1,4 +1,10 @@
+include .env
+export
+
 PWD   := $(shell pwd)
+POSTGRESQL_URL := postgres://$(USER):$(USER)@$(HOST):$(PORT)/manager?sslmode=disable
+
+
 
 .PHONY: help
 help:
@@ -18,6 +24,25 @@ stop-docker: ## Stop docker
 fix: ## Format code
 	$(call print-target)
 	@go fmt ./...
+
+.PHONY: migrate-up
+migrate-up: ## Up migration
+	$(call print-target)
+	@migrate -database $(POSTGRESQL_URL) -path db/migrations up
+
+.PHONY: migrate-down
+migrate-down: ## DOWN migration
+	$(call print-target)
+	@migrate -database $(POSTGRESQL_URL) -path db/migrations down
+.PHONY: migrate-force
+migrate-force: ## Migrate version force version
+	$(call print-target)
+	@migrate -database $(POSTGRESQL_URL) -path db/migrations force $(i)
+
+.PHONY: sql
+show-table: ##Simple table struct view 
+	$(call print-target)
+	@psql  $(POSTGRESQL_URL) -c "\d $(table)"
 
 
 define print-target
