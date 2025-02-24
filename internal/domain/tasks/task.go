@@ -12,12 +12,12 @@ type Task struct {
 	createDate time.Time
 }
 
-func NewTask(id int, name string, desc string) (*Task, error) {
+func NewTask(id int, name string, desc string, createDate time.Time) (*Task, error) {
 	if err := validateName(name); err != nil {
 		return nil, err
 	}
 
-	return &Task{id: id, name: name, desc: desc}, nil
+	return &Task{id: id, name: name, desc: desc, createDate: createDate}, nil
 }
 
 func validateName(name string) error {

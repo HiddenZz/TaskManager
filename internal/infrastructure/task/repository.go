@@ -35,7 +35,7 @@ func (r Repository) GetById(ctx context.Context, id int32) (*domain.Task, error)
 		return nil, fmt.Errorf("failed to select by id %d, %v", id, err)
 	}
 
-	task, err := domain.NewTask(int(data.ID), data.Name, data.Desc.String)
+	task, err := domain.NewTask(int(data.ID), data.Name, data.Desc.String, data.CreateDate.Time)
 	if err != nil {
 		return nil, err
 	}
