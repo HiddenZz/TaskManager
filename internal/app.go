@@ -21,7 +21,7 @@ func Run(config *config.Config) {
 		os.Exit(1)
 	}
 
-	taskRepository := taskImpl.NewRepository()
+	taskRepository := taskImpl.NewRepository(database.Pool)
 	httpServer := app.SetupHttpServer(taskRepository)
 
 	server := http.Server{
