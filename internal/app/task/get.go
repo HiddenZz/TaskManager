@@ -25,10 +25,10 @@ func (hd Handler) GetById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	j, err := json.Marshal(Dto{
+	j, err := json.Marshal(ResponseDto{
 		Id:        task.Id(),
 		Name:      task.Name(),
-		Desc:      task.Desk(),
+		Desc:      task.Desc(),
 		CreatedAt: task.CreateDate(),
 	})
 

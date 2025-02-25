@@ -31,3 +31,8 @@ go.sum
 
 # .env file
 .env
+
+
+#.idea
+.idea
+.vscode

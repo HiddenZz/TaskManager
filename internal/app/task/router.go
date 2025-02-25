@@ -15,5 +15,6 @@ func NewHandler(repository Repository) Handler {
 func NewRouter(router *http.ServeMux, repository Repository) {
 
 	handler := NewHandler(repository)
-	router.HandleFunc("GET /{id}", handler.GetById)
+	router.HandleFunc("GET /tasks/{id}", handler.GetById)
+	router.HandleFunc("POST /tasks/", handler.Create)
 }

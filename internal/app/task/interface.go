@@ -6,6 +6,6 @@ import (
 )
 
 type Repository interface {
-	Create(ctx context.Context)
+	Create(ctx context.Context, createTask func() (*domain.Task, error)) (*domain.Task, error)
 	GetById(ctx context.Context, id int32) (*domain.Task, error)
 }
