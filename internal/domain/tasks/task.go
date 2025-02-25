@@ -20,6 +20,10 @@ func NewTask(id int, name string, desc string, createDate time.Time) (*Task, err
 	return &Task{id: id, name: name, desc: desc, createDate: createDate}, nil
 }
 
+func CreateTask(name string, desc string) (*Task, error) {
+	return NewTask(0, name, desc, time.Now())
+}
+
 func validateName(name string) error {
 	if name == "" {
 		return fmt.Errorf("name is requeired")
@@ -34,7 +38,7 @@ func (t *Task) Name() string {
 	return t.name
 }
 
-func (t *Task) Desk() string {
+func (t *Task) Desc() string {
 	return t.desc
 }
 func (t *Task) CreateDate() time.Time {
