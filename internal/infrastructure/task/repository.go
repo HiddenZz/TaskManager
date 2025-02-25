@@ -15,6 +15,7 @@ type Queries interface {
 	FindTaskById(context.Context, int32) (repository.Task, error)
 	CreateTask(context.Context, repository.CreateTaskParams) (int32, error)
 	CheckExistsTask(context.Context, repository.CheckExistsTaskParams) (bool, error)
+	DeleteTask(context.Context, int32) error
 }
 
 type Repository struct {
@@ -23,6 +24,14 @@ type Repository struct {
 
 func NewRepository(p *pgxpool.Pool) *Repository {
 	return &Repository{q: repository.New(p)}
+}
+
+func (r Repository) Delete(ctx context.Context, id int) error {
+	err := r.q.DeleteTask(ctx, int32(id))
+	if err != nil {
+		return fmt.Errorf("error during deletion")
+	}
+	return err
 }
 
 func (r Repository) Create(ctx context.Context, createTask func() (*domain.Task, error)) (*domain.Task, error) {
@@ -59,8 +68,8 @@ func (r Repository) Create(ctx context.Context, createTask func() (*domain.Task,
 	return task, nil
 }
 
-func (r Repository) GetById(ctx context.Context, id int32) (*domain.Task, error) {
-	data, err := r.q.FindTaskById(ctx, id)
+func (r Repository) GetById(ctx context.Context, id int) (*domain.Task, error) {
+	data, err := r.q.FindTaskById(ctx, int32(id))
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return nil, fmt.Errorf("task not found")
