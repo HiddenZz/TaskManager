@@ -2,9 +2,10 @@ package main
 
 import (
 	"taskmanager.com/config"
-	"taskmanager.com/internal/app"
+	"taskmanager.com/internal"
 )
 
 func main() {
-	app.Run(config.Create())
+	internal.Run(config.Create())
+
 }

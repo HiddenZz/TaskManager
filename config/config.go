@@ -2,8 +2,9 @@ package config
 
 import (
 	"fmt"
-	"github.com/ilyakaznacheev/cleanenv"
 	"net/url"
+
+	"github.com/ilyakaznacheev/cleanenv"
 )
 
 type (
