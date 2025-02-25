@@ -19,7 +19,7 @@ func (hd Handler) GetById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	task, err := hd.repository.GetById(r.Context(), int32(id))
+	task, err := hd.repository.GetById(r.Context(), id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 		return

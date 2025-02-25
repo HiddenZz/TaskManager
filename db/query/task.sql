@@ -13,3 +13,7 @@ INSERT INTO tasks ("name", "desc", "create_date") VALUES ($1, $2, $3)
 
 -- name: CheckExistsTask :one
 SELECT EXISTS (SELECT 1 FROM tasks WHERE "name" = $1 AND "create_date" = $2);
+
+
+-- name: DeleteTask :exec
+DELETE  FROM tasks WHERE id = $1;
