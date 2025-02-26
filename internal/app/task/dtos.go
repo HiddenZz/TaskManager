@@ -13,3 +13,9 @@ type ResponseDto struct {
 	Desc      string    `json:"desc,omitempty"`
 	CreatedAt time.Time `json:"createdAt,omitempty"`
 }
+
+type UpdateRequestDto struct {
+	Name string `json:"name,omitempty"`
+	Desc string `json:"desc,omitempty"`
+	Id   int    `json:"id"`
+}

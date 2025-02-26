@@ -9,4 +9,5 @@ type Repository interface {
 	Create(ctx context.Context, createTask func() (*domain.Task, error)) (*domain.Task, error)
 	GetById(ctx context.Context, id int) (*domain.Task, error)
 	Delete(ctx context.Context, id int) error
+	Update(ctx context.Context, createTask func() (*domain.Task, error)) (*domain.Task, error)
 }
