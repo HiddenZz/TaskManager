@@ -20,6 +20,14 @@ func NewTask(id int, name string, desc string, createDate time.Time) (*Task, err
 	return &Task{id: id, name: name, desc: desc, createDate: createDate}, nil
 }
 
+func TemplateTask(id int, name string, desc string) *Task {
+	return &Task{
+		id:   id,
+		name: name,
+		desc: desc,
+	}
+}
+
 func CreateTask(name string, desc string) (*Task, error) {
 	return NewTask(0, name, desc, time.Now())
 }

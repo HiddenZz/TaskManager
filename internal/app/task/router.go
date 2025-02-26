@@ -18,4 +18,5 @@ func NewRouter(router *http.ServeMux, repository Repository) {
 	router.HandleFunc("GET /tasks/{id}", handler.GetById)
 	router.HandleFunc("POST /tasks/", handler.Create)
 	router.HandleFunc("DELETE /tasks/{id}", handler.Delete)
+	router.HandleFunc("PATCH /tasks/", handler.Patch)
 }

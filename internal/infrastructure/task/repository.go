@@ -16,6 +16,7 @@ type Queries interface {
 	CreateTask(context.Context, repository.CreateTaskParams) (int32, error)
 	CheckExistsTask(context.Context, repository.CheckExistsTaskParams) (bool, error)
 	DeleteTask(context.Context, int32) error
+	UpdateTask(context.Context, repository.UpdateTaskParams) (repository.Task, error)
 }
 
 type Repository struct {
@@ -24,6 +25,26 @@ type Repository struct {
 
 func NewRepository(p *pgxpool.Pool) *Repository {
 	return &Repository{q: repository.New(p)}
+}
+
+func (r Repository) Update(ctx context.Context, createTask func() (*domain.Task, error)) (*domain.Task, error) {
+	task, err := createTask()
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("task not created when updating task ")
+	}
+
+	data, err := r.q.UpdateTask(ctx, repository.UpdateTaskParams{
+		ID:   int32(task.Id()),
+		Name: task.Name(),
+		Desc: types.Text(task.Desc()),
+	})
+	if err != nil {
+		fmt.Print(err)
+		return nil, fmt.Errorf("task not updated %d", task.Id())
+	}
+
+	return fromDTO(data)
 }
 
 func (r Repository) Delete(ctx context.Context, id int) error {
@@ -77,9 +98,13 @@ func (r Repository) GetById(ctx context.Context, id int) (*domain.Task, error) {
 		return nil, fmt.Errorf("failed to select by id %d, %v", id, err)
 	}
 
-	task, err := domain.NewTask(int(data.ID), data.Name, data.Desc.String, data.CreateDate.Time)
+	task, err := fromDTO(data)
 	if err != nil {
 		return nil, err
 	}
 	return task, nil
+}
+
+func fromDTO(data repository.Task) (*domain.Task, error) {
+	return domain.NewTask(int(data.ID), data.Name, data.Desc.String, data.CreateDate.Time)
 }

@@ -71,3 +71,30 @@ func (q *Queries) FindTaskById(ctx context.Context, id int32) (Task, error) {
 	)
 	return i, err
 }
+
+const updateTask = `-- name: UpdateTask :one
+UPDATE tasks
+SET
+    "name" = $2,
+    "desc" = $3
+WHERE id = $1
+RETURNING id, name, "desc", create_date
+`
+
+type UpdateTaskParams struct {
+	ID   int32
+	Name string
+	Desc pgtype.Text
+}
+
+func (q *Queries) UpdateTask(ctx context.Context, arg UpdateTaskParams) (Task, error) {
+	row := q.db.QueryRow(ctx, updateTask, arg.ID, arg.Name, arg.Desc)
+	var i Task
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Desc,
+		&i.CreateDate,
+	)
+	return i, err
+}
