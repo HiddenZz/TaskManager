@@ -3,18 +3,17 @@ package task
 import (
 	"fmt"
 	"net/http"
-	"strconv"
+	"taskmanager.com/helpers/parse"
+	l "taskmanager.com/pkg/logger"
 )
 
 func (hd Handler) Delete(w http.ResponseWriter, r *http.Request) {
-	idStr := r.PathValue("id")
-	if idStr == "" {
-		http.Error(w, "id is required", http.StatusBadRequest)
-	}
 
-	id, err := strconv.Atoi(idStr)
+	id, err := parse.IdStr(r.PathValue("id"))
+
 	if err != nil {
-		http.Error(w, "error when parsing id", http.StatusBadRequest)
+		l.E(err)
+		http.Error(w, fmt.Sprintf("bad id: %v", err), http.StatusBadRequest)
 		return
 	}
 

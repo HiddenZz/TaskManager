@@ -2,26 +2,26 @@ package task
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"strconv"
+	"taskmanager.com/helpers/parse"
+	l "taskmanager.com/pkg/logger"
 )
 
 func (hd Handler) GetById(w http.ResponseWriter, r *http.Request) {
-	idStr := r.PathValue("id")
-	if idStr == "" {
-		http.Error(w, "expected id - got empty string", http.StatusBadRequest)
-		return
-	}
 
-	id, err := strconv.Atoi(idStr)
+	id, err := parse.IdStr(r.PathValue("id"))
+
 	if err != nil {
-		http.Error(w, "error when parsing id", http.StatusBadRequest)
+		l.E(err)
+		http.Error(w, fmt.Sprintf("bad id: %v", err), http.StatusBadRequest)
 		return
 	}
 
 	task, err := hd.repository.GetById(r.Context(), id)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
+		l.E(err)
 		return
 	}
 
