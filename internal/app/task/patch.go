@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 	domain "taskmanager.com/internal/domain/tasks"
+	l "taskmanager.com/pkg/logger"
 )
 
 func (hd Handler) Patch(w http.ResponseWriter, r *http.Request) {
 	var dto UpdateRequestDto
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		http.Error(w, "invalid json", http.StatusBadRequest)
+		l.E(err)
 		return
 	}
 	task, err := hd.repository.Update(r.Context(), func() (*domain.Task, error) {
@@ -17,6 +19,7 @@ func (hd Handler) Patch(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		http.Error(w, "update task competed error", http.StatusBadRequest)
+		l.E(err)
 		return
 	}
 

@@ -8,6 +8,7 @@ import (
 	"taskmanager.com/internal/app"
 	taskImpl "taskmanager.com/internal/infrastructure/task"
 	"taskmanager.com/pkg/db"
+	l "taskmanager.com/pkg/logger"
 )
 
 func Run(config *config.Config) {
@@ -20,6 +21,8 @@ func Run(config *config.Config) {
 		fmt.Printf("run d.Connect: complete with error %v", err)
 		os.Exit(1)
 	}
+
+	l.InitLogging()
 
 	taskRepository := taskImpl.NewRepository(database.Pool)
 	httpServer := app.SetupHttpServer(taskRepository)

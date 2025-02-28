@@ -4,12 +4,14 @@ import (
 	"encoding/json"
 	"net/http"
 	domain "taskmanager.com/internal/domain/tasks"
+	l "taskmanager.com/pkg/logger"
 )
 
 func (hd Handler) Create(w http.ResponseWriter, r *http.Request) {
 	var dto CreateRequestDto
 	if err := json.NewDecoder(r.Body).Decode(&dto); err != nil {
 		http.Error(w, "invalid json", http.StatusBadRequest)
+		l.EMsg("%v", err)
 		return
 	}
 	task, err := hd.repository.Create(r.Context(), func() (*domain.Task, error) {
@@ -17,6 +19,7 @@ func (hd Handler) Create(w http.ResponseWriter, r *http.Request) {
 	})
 	if err != nil {
 		http.Error(w, "create task competed error", http.StatusBadRequest)
+		l.EMsg("%v", err)
 		return
 	}
 
